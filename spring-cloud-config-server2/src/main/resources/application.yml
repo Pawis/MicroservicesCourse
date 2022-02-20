@@ -1,0 +1,18 @@
+# Nazwa naszego config servera
+spring:
+ application: 
+  name: spring-cloud-config-server
+
+# Sciezka do folderu z git repo ktore ma limits-server.properties
+ cloud:
+  config:
+   server:
+    git:
+     uri: file:///home/Pawis/git-localconfig-repo
+# Git standardowo nazywa glowny branch main a spring cloud szuka brancha o nazwie master wiec musimy to zmienic 
+     default-label: master
+
+server:
+ port: 8888
+
+

@@ -1,0 +1,55 @@
+spring:
+ application:
+  name: currency-exchange
+ config: 
+  import: optional:configserver:http://localhost:8888
+ jpa:
+  # Musimy to wpisac jesli chcemy zainicjalizowac bazde danych naszymi danymi z pliku,
+  # bez tego spring najpierw chce zainicjalizowac baze danymi a pozniej stworzyc ja z naszego entity przez co wywala blad
+  defer-datasource-initialization: true 
+  show-sql: true
+ datasource:
+  url: jdbc:h2:mem:testdb  
+ h2:
+  console:
+   enabled: true 
+ sleuth: # Uzywamy Spring Cloud Sleuth do sledzenia naszych requestow przez mikroserwisy
+         # Sleuth dodaje unikalne id do kazdego mikroserwisu
+   sampler: 
+    probability: 1.0 # To ustawienie powodoje ze sledzimy kazdy request, jesli chemy sledzic np 5% requestow to musimy ustawic 0.05
+    
+# Sprawdz Run Configuration jak mozna uruchomic pare aplikacji naraz na roznych portach
+# Trzeba wejsc w RunConfiguration zduplikowac aplikacje ktora chcemy uruchomic na roznych portach
+# a nastepnie do kazdej kopii dodac -Dserver.port=<numer portu> co nadpisze ponizsze ustawienia
+server:
+ port: 8000  
+ 
+# Mozemy manualnie podac url do naszego servera Eureka
+eureka:
+ client:
+  serviceUrl:
+   defaultZone: http://localhost:8761/eureka
+ 
+# Ustawienia Resilience 
+resilience4j: 
+ retry: 
+  instances: 
+   sample-api: # Nazwa ktora podajemy do addnotacji @Retry
+    enableExponentialBackoff: true # Czy czas ma rosnac wykladniczo pomiedzy proba retry, wiekszosc mikroserwisow tego uzywa
+    waitDuration: 1s # Czas pomiedzy probami polaczenia
+    maxAttempts: 5  # Ilosc prob polaczenia
+ ratelimiter: 
+  instances: 
+   default:
+    limitForPeriod: 2 # Ilosc requestow ktora wpuszczamy w danym czasie
+    limitRefreshPeriod: 10s # Dany czas w ktorym wpuszczamy okreslana ilosc rquestow
+ bulkhead: 
+  instances: 
+   default:
+    maxConcurrentCalls: 10 # Ilosc requestow jakas wpuszczamy jednoczesnie - Concurrence
+    
+ 
+    
+     
+    
+    

@@ -1,0 +1,37 @@
+spring:
+ application:
+  name: api-gateway
+ sleuth: # Uzywamy Spring Cloud Sleuth do sledzenia naszych requestow przez mikroserwisy
+         # Sleuth dodaje unikalne id do kazdego mikroserwisu
+   sampler: 
+    probability: 1.0 # To ustawienie powodoje ze sledzimy kazdy request, jesli chemy sledzic np 5% requestow to musimy ustawic 0.05
+    
+# Dzieki temu ApiGateway automatycznie laczy sie z Eureka i dostaje adresy do naszych serwisow
+# !!! WAZNE !!!  
+# A dziala to tak:
+# ApiGateway - http://localhost:8765/CURRENCY-EXCHANGE/currency-exchange/from/USD/to/INR
+# link bezposredni - localhost:8000/currency-exchange/from/EUR/to/INR
+# do naszego ApiGateway http://localhost:8765/ wysylamy zapytanie z nazwa serwisu ktory chcemy wywolac np. CURRENCY-EXCHANGE/
+# po czym podajemy parametry ktore bysmy podali wywolujac ten serwis
+# Mozemy rowniez wywolac serwis ktory wywoluje inny serwis np.
+# http://localhost:8765/CURRENCY-CONVERSION/currency-conversion-feign/from/USD/to/INR/quantity/10
+ 
+# Lepiej jest to zrobic w Javie - mamy wiecej kontroli 
+ 
+# cloud: 
+#  gateway: 
+#   discovery: 
+#    locator:
+#     lowerCaseServiceId: true # Nazwy naszych serwisow w linku beda teraz musialy byc napisane malymi literami
+#     enabled: true # To laczy Eureke z ApiGateway
+     
+   
+server: 
+ port: 8765  
+
+ # Mozemy manualnie podac url do naszego servera Eureka
+eureka:
+ client:
+  serviceUrl:
+   defaultZone: http://localhost:8761/eureka
+ 

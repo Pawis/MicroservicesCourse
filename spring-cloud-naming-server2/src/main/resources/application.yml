@@ -1,0 +1,13 @@
+spring:
+ application:
+  name: naming-server
+
+server:
+ port: 8761
+ 
+# Bez tego Eureka zarejestruje sie sama jako dostepny serwis czego nie chcemy
+eureka: 
+ client:
+  register-with-eureka: false
+  fetch-registry: false
+ 

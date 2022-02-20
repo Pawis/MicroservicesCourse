@@ -1,0 +1,19 @@
+spring: 
+ application:
+  name: currency-conversion
+ config:
+  import: optional:configserver:http:localhost:8888
+ sleuth: # Uzywamy Spring Cloud Sleuth do sledzenia naszych requestow przez mikroserwisy
+         # Sleuth dodaje unikalne id do kazdego mikroserwisu
+   sampler: 
+    probability: 1.0 # To ustawienie powodoje ze sledzimy kazdy request, jesli chemy sledzic np 5% requestow to musimy ustawic 0.05
+     
+server:
+ port:  8100
+ 
+# Mozemy manualnie podac url do naszego servera Eureka
+eureka:
+ client:
+  serviceUrl:
+   defaultZone: http://localhost:8761/eureka
+ 

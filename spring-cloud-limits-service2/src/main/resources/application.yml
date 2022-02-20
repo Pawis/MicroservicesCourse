@@ -1,0 +1,32 @@
+
+# Nazwa pomaga nam polaczyc sie z config serveram, najlepiej zeby plik z wlasciwosciami na serverze mial taka sama nazwe
+# plik o tej nazwie bedzie naszym default jesli chcemy dodac inne pliki dodajemy je przez limits-service.<cos>
+# i uzywamy przez loclahost:8888/limits-service/<cos>
+spring:
+ application: 
+  name: limits-service
+
+# !!! WAZNE !!!
+# url do naszego servera z wlasciwosciami, jesli chcemy zeby byl wymagany musimy usunac optional:
+ config: 
+  import: optional:configserver:http://localhost:8888
+
+ profiles:
+  active: qa
+# Nie wiem czym to sie rozni ale dziala, dolny chyba zmienia dzialanie a gorny daje tylko nazwe profilu w logach
+ cloud:
+  config:
+   profile: qa
+#   name: Moze byz uzyte zamiast spring.application.name zeby polaczyc sie do pliku z wlasciwosciami na serverze 
+
+ 
+
+server:
+ port: 8081
+
+# Wlasciwosci ktore zostaja przeslane do klasy ConfigurationProps ich prefix to limits-service
+# Jesli udalo sie nam polaczyc z serverem te wlasciwosci beda nadpisane serverowymi
+# limits-service:
+# minimum: 2
+# limits-service: 
+# maximum: 998
